@@ -59,7 +59,9 @@ var u12 = {
     },
 
     alertLog: function (msg) {
-        this.alertWrap(msg, 'log');
+        if (msg.toString != '') { 
+            this.alertWrap(msg, 'log');
+        };
     },
 
     alertErr: function (msg) {
@@ -163,25 +165,31 @@ angular.module('d3', [
                 }
             });
 
-            $rootScope.$on('$locationChangeSuccess', function() {
-                    $rootScope.actualLocation = $location.path();
-                });        
+            $rootScope.$on('$locationChangeSuccess', function (evt, absNewUrl, absOldUrl) {
+                // console.log('success', evt, absNewUrl, absOldUrl);
+                $rootScope.prevUrl = absOldUrl;
+            });
 
-            $rootScope.$watch(function () {return $location.path()}, function (newLocation, oldLocation) {
-                    if($rootScope.actualLocation === newLocation) {
-                        if ($rootScope.deliberateBack) {
-                            $rootScope.deliberateBack = false;
-                            // console.log('deliberateBack');
-                        } else {
-                            // console.log('history back');
-                            // if (newLocation = '/order/spec' && !Order.currSpecLine.product && Order.autoSpecNewLine) { 
-                            //     Order.autoSpecNewLine = false;
-                            //     window.history.back();
-                            // };
-                        };
-                        
-                    }
-                });
+            // $rootScope.$on('$locationChangeSuccess', function() {
+            //         $rootScope.actualLocation = $location.path();
+            //     });        
+
+
+            // $rootScope.$watch(function () {return $location.path()}, function (newLocation, oldLocation) {
+            //         if($rootScope.actualLocation === newLocation) {
+            //             if ($rootScope.deliberateBack) {
+            //                 $rootScope.deliberateBack = false;
+            //                 // console.log('deliberateBack');
+            //             } else {
+            //                 // console.log('history back');
+            //                 // if (newLocation = '/order/spec' && !Order.currSpecLine.product && Order.autoSpecNewLine) { 
+            //                 //     Order.autoSpecNewLine = false;
+            //                 //     window.history.back();
+            //                 // };
+            //             };
+
+            //         }
+            //     });
 
             // $rootScope.$back = function () {
             //     window.history.back();
@@ -218,49 +226,49 @@ angular.module('d3', [
     //     };
     // })
 
-.directive('focusMe', function($timeout) {
-  return {
-    scope: { trigger: '=focusMe' },
-    link: function(scope, element) {
-      scope.$watch('trigger', function(value) {
-        if(value === true) { 
-          $timeout(function() {
-            element[0].focus();
-            scope.trigger = false;
-          });
-        }
-      });
-    }
-  };
-})
+    .directive('focusMe', function ($timeout) {
+        return {
+            scope: { trigger: '=focusMe' },
+            link: function (scope, element) {
+                scope.$watch('trigger', function (value) {
+                    if (value === true) {
+                        $timeout(function () {
+                            element[0].focus();
+                            scope.trigger = false;
+                        });
+                    }
+                });
+            }
+        };
+    })
 
 
 
 
 
-// .directive('myRepeat', function () {
-//     return {
-//         replace : true,
-//         link: function ($scope, $elem, attrs) {
+    // .directive('myRepeat', function () {
+    //     return {
+    //         replace : true,
+    //         link: function ($scope, $elem, attrs) {
 
-//             $scope.$watch('collectionObject', function (oldValue, newValue) {
-//                 var tableRow = "";
-//                 angular.forEach($scope.collectionObject, function (item) {
-//                     tableRow = tableRow + '<li class="mdl-menu__item" ng-click="consoleLog(' + "'" + item.id + "'" + ')">' + item.description + '</li>';
-//                 });
+    //             $scope.$watch('collectionObject', function (oldValue, newValue) {
+    //                 var tableRow = "";
+    //                 angular.forEach($scope.collectionObject, function (item) {
+    //                     tableRow = tableRow + '<li class="mdl-menu__item" ng-click="consoleLog(' + "'" + item.id + "'" + ')">' + item.description + '</li>';
+    //                 });
 
- 
-                
-//                 //If IE is your primary browser, 
-//                 //innerHTML is recommended to increase the performance
-//                 //$elem.context.innerHTML = tableRow;
-//                 //If IE is not your primary browser, 
-//                 //just appending the content to the element is enough .
-//                 $elem.append(tableRow);
-//             });
-//         }
-//     }
-// })
+
+
+    //                 //If IE is your primary browser, 
+    //                 //innerHTML is recommended to increase the performance
+    //                 //$elem.context.innerHTML = tableRow;
+    //                 //If IE is not your primary browser, 
+    //                 //just appending the content to the element is enough .
+    //                 $elem.append(tableRow);
+    //             });
+    //         }
+    //     }
+    // })
 
 
 
@@ -301,7 +309,7 @@ angular.module('d3', [
 
                     // if (cfg.url[0] !== '/') { cfg.url = '/Trade/hs/b12v1/' + cfg.url };
                     //if (cfg.url[0] !== '/') { cfg.url = '/mexico/hs/b12v1/' + cfg.url };
-                    if (cfg.url[0] !== '/') { cfg.url = '/UT/hs/mv1/' + cfg.url };
+                    if (cfg.url[0] !== '/') { cfg.url = '/trade/hs/mobile/' + cfg.url };
 
                     if (!cfg.method) { cfg.method = 'GET' };
 

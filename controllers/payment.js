@@ -68,6 +68,9 @@ angular
                         } else if (Payment.state === 'success') {
                             u12.alertSuc(response.data.message);
                             vm.exit();
+                        } else if (Payment.state === undefined) {
+                            Payment.state = 'process';
+                            u12.alertLog(response.data.message);
                         } else {
                             u12.alertLog(response.data.message);
                         };

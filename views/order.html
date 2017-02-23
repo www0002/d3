@@ -126,12 +126,26 @@
 		</div>
 	</div>
 
-	<div class="mdl-color-text--primary" style='padding-top: 15px'>Организация...</div>
-	<!--<div class="mdl-selectfield">-->
-		<select ng-model="Order.firm" ng-options="firm as firm.description for firm in User.firms" ng-change="onSelectFirm()" />
-	<!--</div>-->
+	<div ng-show="User.firms && User.firms.length > 1" style='padding-bottom: 20px'>
+		<div class="mdl-color-text--primary" style='font-size: 12px'>
+			Организация...
+		</div>
+		<select ng-model="Order.firm" ng-options="firm as firm.description for firm in User.firms" ng-change="onSelectFirm()"></select>
+	</div>
 
+	<div ng-show="User.stocks && User.stocks.length > 1" style='padding-bottom: 20px'>
+		<div class="mdl-color-text--primary" style='font-size: 12px'>
+			Склад...
+		</div>
+		<select ng-model="Order.stock" ng-options="stock as stock.description for stock in User.stocks" ng-change="onSelectStock()"></select>
+	</div>
 
+	<div ng-show="User.dlvTypes && User.dlvTypes.length > 1" style='padding-bottom: 20px'>
+		<div class="mdl-color-text--primary" style='font-size: 12px'>
+			Способ доставки...
+		</div>
+		<select ng-model="Order.dlvType" ng-options="dlvType as dlvType.description for dlvType in User.dlvTypes" ng-change="onSelectDlvType()"></select>
+	</div>
 
 
 	<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
@@ -197,7 +211,7 @@
 
 
 	<div class="d3-fixed-right-down" style="float: right">
-		<button ng-click="save()" class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>Записать</button>
+		<button ng-click="saveDocument()" class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>Записать</button>
 		<button ng-click="exit()" class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>В начало</button>
 	</div>
 

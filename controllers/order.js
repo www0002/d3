@@ -177,24 +177,28 @@ angular
             //******************   doc form
             //*******************************************************************
 
-            // $scope.firmz = [{ref_key: 1, description: 'alphabet'}, {ref_key: 2, description: 'nestle'}, {ref_key: 3, description: 'sss'}];
-
-            // $scope.selectedFirm = $scope.firmz[1].description;
-
             $scope.onSelectFirm = function () {
                 console.log(Order.firm);
             };
 
-
-            // $scope.selectedFirm = $rootScope.User.firms[0];
-
-            // $scope.onSelectFirm = function () {
-            //     console.log($scope.selectedFirm);
-            // };
-
-
             if (!Order.firm && $rootScope.User && $rootScope.User.firms) {
                 Order.firm = $rootScope.User.firms[0];
+            };
+            
+            $scope.onSelectStock = function () {
+                console.log(Order.stock);
+            };
+
+            if (!Order.stock && $rootScope.User && $rootScope.User.stocks) {
+                Order.stock = $rootScope.User.stocks[0];
+            };
+            
+            $scope.onSelectDlvType = function () {
+                console.log(Order.dlvType);
+            };
+
+            if (!Order.dlvType && $rootScope.User && $rootScope.User.dlvTypes) {
+                Order.dlvType = $rootScope.User.dlvTypes[0];
             };
             
 
@@ -203,7 +207,7 @@ angular
                 $location.path('/');
             };
 
-            $scope.save = function () {
+            $scope.saveDocument = function () {
 
                 var vm = this;
 
@@ -214,25 +218,25 @@ angular
 
                 Order.state = 'pending';
 
-                Base.postOrder(
-                    { client: Order.client, dlvDate: Order.dlvDate, firm: Order.firm, comment: Order.comment, spec: Order.spec },
-                    function (response) {
+                Base.postOrder( { client: Order.client, dlvDate: Order.dlvDate, firm: Order.firm, stock: Order.stock, dlvType: Order.dlvType, comment: Order.comment, spec: Order.spec } )
+                    .then( function (response) {
                         Order.state = response.data.state;
                         if (Order.state === 'error') {
                             u12.alertErr(response.data.message);
                         } else if (Order.state === 'success') {
                             u12.alertSuc(response.data.message);
                             vm.exit();
+                        } else if (Order.state === undefined) {
+                            Order.state = 'process';
+                            u12.alertLog(response.data.message);
                         } else {
                             u12.alertLog(response.data.message);
                         };
-
-                    },
-                    function (response) {
+                    })
+                    .catch( function (response) {
                         Order.state = 'error';
                         u12.alertErr('ошибка');
-                    }
-                );
+                    });
             };
 
         }])
