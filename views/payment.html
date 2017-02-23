@@ -1,0 +1,90 @@
+<form ng-if='Payment.activeForm==="client/filter"'>
+
+	<div class='mdl-textfield mdl-js-textfield mdl-textfield--floating-label'>
+		<input ng-model='Payment.clientDescr' ng-trim="false" class='mdl-textfield__input' type='text' id='clientDescr' focus-me="true" select-on-focus>
+		<label class='mdl-textfield__label' for='clientDescr'>Партнер...</label>
+	</div>
+
+	<div class="d3-fixed-right-down">
+		<button ng-click='findClient()' type='submit' class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>найти</button>
+	</div>
+
+</form>
+
+<div ng-if='Payment.activeForm==="client/select"'>
+
+	<ul class="mdl-list">
+
+		<li ng-repeat="item in Payment.clientList track by $index" ng-click="onSelectClient(item)" class="mdl-list__item mdl-list__item--two-line">
+			<span class="mdl-list__item-primary-content">
+				<i class="material-icons mdl-list__item-avatar">account_circle</i>
+				<span>{{item.description}}</span>
+				<span class="mdl-list__item-sub-title">{{item._info}}</span>
+			</span>
+			<!--<span class="mdl-list__item-secondary-content"></span>-->
+    
+		</li>
+
+	</ul>
+
+	<!--<div class="d3-fixed-right-down">
+		<button ng-click='switchTo("filter")' type='submit' class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>фильтр</button>
+	</div>-->
+
+</div>
+
+
+<form name='form' ng-if='Payment.activeForm==="debts/specify"'>
+
+	<div class="mdl-card mdl-shadow--2dp">
+		<div class="mdl-card__title">
+			<h2 class="mdl-card__title-text">{{Payment.client.description}}</h2>
+		</div>
+		<div class="mdl-card__supporting-text">
+			{{Payment.client._info}}
+		</div>
+	</div>
+
+	<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+		<thead>
+			<tr>
+				<th>
+					<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-0">
+  					<input type="checkbox" id="checkbox-0" class="mdl-checkbox__input" checked disabled>
+				</label>
+				</th>
+				<th>Сумма</th>
+				<th class="mdl-data-table__cell--non-numeric">Дата</th>
+				<th class="mdl-data-table__cell--non-numeric">Номер</th>
+				<th>Комментарий</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<!--<tr ng-repeat="debt in Payment.debts track by $index" ng-class="{'mdl-color--accent': debt.comment}">-->
+			<tr ng-repeat="debt in Payment.debts track by $index" ng-class="{'mdl-color--yellow-100': debt.comment}">
+				<td>
+					<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="debt{{$index}}">
+  					<input ng-disabled="debt.blockNetting" ng-model="debt.checked" ng-change="Payment.onCkeckDebt(debt)" type="checkbox" ng-attr-id="{{'debt'+$index}}" class="mdl-checkbox__input">
+				</label>
+				</td>
+				<td>{{debt.debt.toFixed(2)}}</td>
+				<td class="mdl-data-table__cell--non-numeric">{{debt.date}}</td>
+				<td class="mdl-data-table__cell--non-numeric">{{debt.numb}}</td>
+				<td class="mdl-data-table__cell--non-numeric">{{debt.comment}}</td>
+
+			</tr>
+		</tbody>
+	</table>
+
+	<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+		<input ng-model='Payment.sum' class="mdl-textfield__input" type="number" step="0.01" id="paymentSum">
+		<label class="mdl-textfield__label" for="paymentSum">Получена сумма...</label>
+	</div>
+
+	<div class="d3-fixed-right-down" style="float: right">
+<button ng-click="save()" class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>Записать</button>
+<button ng-click="exit()" class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>В начало</button>
+</div>
+
+</form>

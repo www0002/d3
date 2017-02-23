@@ -1,0 +1,73 @@
+.d3-fixed-right-down {
+	bottom: 16px;
+	right: 16px;
+	position: fixed;
+}
+
+.d3-abs-right-down {
+	bottom: 45px;
+	right: 24px;
+	position: absolute;
+}
+
+
+.d3-right-down {
+	bottom: 45px;
+	right: 24px;
+}
+
+.d3-main-frame {
+	padding-top: 3px;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-bottom: 50px;
+}
+
+.d3-p5 {
+	padding-top: 5px;
+}
+
+.d3-p3 {
+	padding-top: 3px;
+}
+
+.d3-w100 {
+	width: 100%;
+}
+
+.d3-full-width {
+	width: 100%;
+	min-height: 0%;
+}
+
+.mdl-card {
+	width: 100%;
+	min-height: 0%;
+}
+
+.d3-progress-container {
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    z-index: 99999;
+	position: fixed;
+}
+
+.my-flex-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+
+.my-flex-block{
+	flex-grow: 1;
+	/*align-self: stretch;*/
+	/*max-width: 100%;*/
+}
+
+.alertify-logs.bottom, .alertify-logs:not(.top) {
+    bottom: 64px; 
+}

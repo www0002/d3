@@ -1,0 +1,258 @@
+<!--<div>
+	<div class="mdl-card mdl-shadow--2dp">
+		<div class="mdl-card__title">
+			<div class="mdl-card__title-text">
+				<p>Заказ {{Order.id||'(создание)'}}</p>
+			</div>
+		</div>
+
+  <div class="mdl-card__menu">
+    <button ng-click="exit()" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+      <i class="material-icons">close</i>
+    </button>
+  </div>
+
+	</div>
+</div>-->
+
+<form ng-show='activeView==="client/filter"'>
+
+	<div ng-show='clientView === "filter"'>
+
+		<div class='mdl-textfield mdl-js-textfield mdl-textfield--floating-label'>
+			<!--<input ng-model='Order.clientDescr' ng-trim="false" class='mdl-textfield__input' type='text' id='clientDescr' focus-me="true" focus-on="focusClientDescr" select-on-focus>-->
+			<input ng-model='Order.clientDescr' ng-trim="false" class='mdl-textfield__input' type='text' id='clientDescr' focus-me="defaultFocus"
+				select-on-focus>
+				<label class='mdl-textfield__label' for='clientDescr'>Партнер...</label>
+		</div>
+
+		<div class="d3-fixed-right-down">
+			<!--<button ng-click='findClient(); clientView = "select"' type='submit' class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>найти</button>-->
+			<button ng-click='findClient()' type='submit' class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>найти</button>
+		</div>
+
+	</div>
+
+	<!--<div ng-show='clientView === "select" || (clientView === undefined && Order.clientList.length > 0)'>-->
+	<div ng-show='clientView === "select"'>
+
+		<ul class="mdl-list">
+
+			<!--<li ng-repeat="item in Order.clientList track by $index" ng-click="onSelectClient($index)" class="mdl-list__item mdl-list__item--two-line" ng-attr-id="{{'cli-'+$index}}">-->
+			<li ng-repeat="item in clientList track by $index" ng-click="onSelectClient($index)" class="mdl-list__item mdl-list__item--two-line"
+				ng-attr-id="{{'cli-'+$index}}">
+				<span class="mdl-list__item-primary-content">
+				<i class="material-icons mdl-list__item-avatar">account_circle</i>
+				<span>{{item.description}}</span>
+				<span class="mdl-list__item-sub-title">{{item._info}}</span>
+				</span>
+				<span class="mdl-list__item-secondary-content">
+				</span>
+				</li>
+
+		</ul>
+
+		<div class="d3-fixed-right-down">
+			<button ng-click='switchToClientFilter(); defaultFocus = true' class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>поиск</button>
+			<!--<button ng-click='switchToClientFilter()' class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>поиск</button>-->
+		</div>
+
+	</div>
+
+</form>
+
+<form ng-show='activeView==="product/filter"'>
+
+	<div ng-show='productView === "filter"'>
+
+		<div class='mdl-textfield mdl-js-textfield mdl-textfield--floating-label'>
+			<input ng-model='Order.productDescr' ng-trim="false" class='mdl-textfield__input' type='text' id='productDescr' focus-me="defaultFocus"
+				select-on-focus>
+				<label class='mdl-textfield__label' for='productDescr'>Номенклатура...</label>
+		</div>
+
+		<div class="d3-fixed-right-down">
+			<div class="d3-p3">
+				<button ng-click='findProduct()' type='submit' class='d3-w100 mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>найти</button>
+			</div>
+			<div class="d3-p3">
+				<button ng-click='btnSales()' class='d3-w100 mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>продажи</button>
+			</div>
+		</div>
+
+	</div>
+
+	<div ng-show='productView === "select"'>
+
+		<ul class="mdl-list">
+
+			<li ng-repeat="item in Order.productList track by $index" ng-click="onSelectProduct(item)" class="mdl-list__item mdl-list__item--two-line">
+				<span class="mdl-list__item-primary-content">
+					<i class="material-icons mdl-list__item-avatar">shopping_cart</i>
+					<span>{{item.description}}</span>
+				<span class="mdl-list__item-sub-title">{{item._info}}</span>
+				</span>
+				<span class="mdl-list__item-secondary-content"></span>
+			</li>
+
+		</ul>
+
+		<div class="d3-fixed-right-down">
+			<button ng-click='switchToProductFilter(); defaultFocus = true' class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>поиск</button>
+			<!--<button ng-click='switchToClientFilter()' class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>поиск</button>-->
+		</div>
+
+	</div>
+
+</form>
+
+
+<!--<form name='form' ng-show='activeView==="document"'>-->
+<form name='form' ng-show='activeView==="document"'>
+
+	<div ng-click="chooseClient()" class="mdl-card mdl-shadow--2dp">
+		<div class="mdl-card__title">
+			<h2 class="mdl-card__title-text">{{(Order.client) ? Order.client.description : 'Партнер...'}}</h2>
+		</div>
+		<div class="mdl-card__supporting-text">
+			{{Order.client._info}}
+		</div>
+	</div>
+
+	<div style='padding-top: 20px'>
+		<div class='mdl-textfield mdl-js-textfield mdl-textfield--floating-label'>
+			<input ng-model='Order.dlvDate' class='mdl-textfield__input' type='date' id='orderDate'>
+			<label class='mdl-textfield__label' for='orderDate'>Дата доставки...</label>
+		</div>
+	</div>
+
+	<div class="mdl-color-text--primary" style='padding-top: 15px'>Организация...</div>
+	<!--<div class="mdl-selectfield">-->
+		<select ng-model="Order.firm" ng-options="firm as firm.description for firm in User.firms" ng-change="onSelectFirm()" />
+	<!--</div>-->
+
+
+
+
+	<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+		<input ng-model='Order.comment' class="mdl-textfield__input" type="text" id="orderComment">
+		<label class="mdl-textfield__label" for="orderComment">Комментарий...</label>
+	</div>
+
+	<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+		<thead>
+			<tr>
+				<th class="mdl-data-table__cell--non-numeric">Номенклатура</th>
+				<th>Кол</th>
+				<th>Цена</th>
+				<th>Сумма</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr ng-repeat="line in Order.spec track by $index" ng-click="editSpecLine($index)">
+				<td class="mdl-data-table__cell--non-numeric">{{line.product.description}}</td>
+				<td>{{line.quantity}}</td>
+				<td>{{line.price}}</td>
+				<td>{{(line.quantity*line.price).toFixed(2)}}</td>
+			</tr>
+
+			<tr id='blankLine' ng-click="startLine()">
+				<td class="mdl-data-table__cell--non-numeric">Товар...</td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+
+		</tbody>
+	</table>
+
+	<div>
+		<h5>{{Order.specTotal().toFixed(2)}}</h5>
+	</div>
+
+	<table ng-show='User.rotatingTare' class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+		<thead>
+			<tr>
+				<th>Возвр.</th>
+				<th>Долг</th>
+				<th class="mdl-data-table__cell--non-numeric">Тара</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr ng-repeat="tareLine in Order.rotatingTare track by $index">
+				<td>
+					<div style="width:50px; padding: 0px" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+						<input ng-model='tareLine.quantity' class="mdl-textfield__input" type="number" select-on-focus>
+					</div>
+				</td>
+				<td>{{tareLine.debt}}</td>
+				<td class="mdl-data-table__cell--non-numeric">{{tareLine.tare.description}}</td>
+
+			</tr>
+
+		</tbody>
+	</table>
+
+
+	<div class="d3-fixed-right-down" style="float: right">
+		<button ng-click="save()" class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>Записать</button>
+		<button ng-click="exit()" class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>В начало</button>
+	</div>
+
+</form>
+
+
+<form name='form' ng-show='activeView==="spec"'>
+
+	<div ng-click="chooseProduct()" class="mdl-card mdl-shadow--2dp">
+		<div class="mdl-card__title">
+			<h2 class="mdl-card__title-text">{{(Order.currSpecLine.product) ? Order.currSpecLine.product.description : 'Номенклатура...'}}</h2>
+		</div>
+	</div>
+
+	<!--<div class="mdl-selectfield mdl-js-selectfield mdl-selectfield--floating-label">
+  <select id="myselect" name="myselect" class="mdl-selectfield__select">
+    <option value="option0_value">шт</option>
+    <option value="option1_value">упак</option>
+  </select>
+  <label class="mdl-selectfield__label" for="myselect">Упаковка...</label>
+</div>-->
+
+	<!--<div style='padding-top: 20px'>
+	<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+		<input ng-model='Order.currSpecLine.price' class="mdl-textfield__input" type="number" id="specPrice" disabled>
+		<label class="mdl-textfield__label" for="specPrice">Цена...</label>
+	</div>
+</div>-->
+
+	<div>
+		<h5>Цена {{Order.currSpecLine.price.toFixed(2)}}</h5>
+	</div <div style='padding-top: 20px'>
+	<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+		<input ng-model='Order.currSpecLine.quantity' class="mdl-textfield__input" type="number" id="specQuant" focus-me="defaultFocus"
+			select-on-focus>
+			<label class="mdl-textfield__label" for="specQuant">Количество...</label>
+	</div>
+	</div>
+
+	<div class="d3-fixed-right-down">
+		<div class="d3-p3">
+			<button ng-click='saveLine()' type='submit' class='d3-w100 mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>ОК</button>
+		</div>
+		<!--<div class="d3-p3" ng-show='Order.currSpecLine.id'>
+			<button ng-click='deleteLine()' class='d3-w100 mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>Удалить</button>
+		</div>-->
+		<!--<div class="d3-p3" ng-show='!Order.currSpecLine.id'>
+			<button ng-click='addLine()' type='submit' class='d3-w100 mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>Добавить</button>
+		</div>
+		<div class="d3-p3" ng-show='Order.currSpecLine.id'>
+			<button ng-click='editLine()' class='d3-w100 mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>Сохранить</button>
+		</div>
+		<div class="d3-p3">
+			<button ng-click='cancelLine()' class='d3-w100 mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>Отмена</button>
+		</div>-->
+	</div>
+
+</form>
