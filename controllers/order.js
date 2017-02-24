@@ -41,13 +41,25 @@ angular
                 // find existing line by product ref_key
 
                 Order.currSpecLine.product = product;
-                Order.currSpecLine.price = (product.price || 0) ;
+                // Order.currSpecLine.price = (product.price || 0) ;
+                Order.currSpecLine.price =  0;
 
                 var existLine = Order.specFindLineByProduct(product);
                 if (existLine) {
                     u12.alertLog('Товар уже есть в заказе');
                     Order.currSpecLine = angular.copy(existLine);
                 };
+
+                Base.getProducts({ ProductId: Order.currSpecLine.product.ref_key, ClientId: Order.client.ref_key })
+                    .then( function (response) {
+                        if (response.data.value) {
+                            Order.currSpecLine.product = response.data.value[0];
+                            if (Order.currSpecLine.product.PriceList) {
+                                Order.currSpecLine.price =  Order.currSpecLine.product.PriceList[0].Price;
+                                Order.currSpecLine.priceDescr = ' (' + Order.currSpecLine.product.PriceList[0].PriceDescr + '):';
+                            }
+                        };
+                    });
 
                 $rootScope.deliberateBack = true;
                 window.history.back();
