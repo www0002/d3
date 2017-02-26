@@ -109,12 +109,16 @@ angular.module('d3', [
 
         $routeProvider
 
-            .when('/payment/:attr/:form', {
+            // .when('/payment/:attr/:form', {
+            //     controller: 'PaymentController',
+            //     templateUrl: 'views/payment.html'
+            // })
+
+            .when('/payment/:link*', {
                 controller: 'PaymentController',
                 templateUrl: 'views/payment.html'
             })
 
-            // .when('/order/:part/:line/:attr/:form', {
             .when('/order/:link*', {
                 controller: 'OrderController',
                 templateUrl: 'views/order.html'

@@ -1,40 +1,87 @@
-<form ng-if='Payment.activeForm==="client/filter"'>
+<!--<form ng-show='activeView==="client/filter"'>
 
-	<div class='mdl-textfield mdl-js-textfield mdl-textfield--floating-label'>
-		<input ng-model='Payment.clientDescr' ng-trim="false" class='mdl-textfield__input' type='text' id='clientDescr' focus-me="true" select-on-focus>
-		<label class='mdl-textfield__label' for='clientDescr'>Партнер...</label>
+	<div ng-show='clientView === "filter"'>
+
+		<div class='mdl-textfield mdl-js-textfield mdl-textfield--floating-label'>
+			<input ng-model='Payment.clientDescr' ng-trim="false" class='mdl-textfield__input' type='text' id='clientDescr' focus-me="true"
+				select-on-focus>
+				<label class='mdl-textfield__label' for='clientDescr'>Партнер...</label>
+		</div>
+
+		<div class="d3-fixed-right-down">
+			<button ng-click='findClient()' type='submit' class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>найти</button>
+		</div>
 	</div>
 
-	<div class="d3-fixed-right-down">
-		<button ng-click='findClient()' type='submit' class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>найти</button>
+	<div ng-show='clientView === "select"'>
+
+		<ul class="mdl-list">
+
+			<li ng-repeat="item in Payment.clientList track by $index" ng-click="onSelectClient(item)" class="mdl-list__item mdl-list__item--two-line">
+				<span class="mdl-list__item-primary-content">
+					<i class="material-icons mdl-list__item-avatar">account_circle</i>
+					<span>{{item.description}}</span>
+					<span class="mdl-list__item-sub-title">{{item._info}}</span>
+				</span>
+
+			</li>
+
+		</ul>
+
+	</div>
+
+</form>-->
+
+
+
+<form ng-show='activeView==="client/filter"'>
+
+	<div ng-show='clientView === "filter"'>
+
+		<div class='mdl-textfield mdl-js-textfield mdl-textfield--floating-label'>
+			<!--<input ng-model='Payment.clientDescr' ng-trim="false" class='mdl-textfield__input' type='text' id='clientDescr' focus-me="true" focus-on="focusClientDescr" select-on-focus>-->
+			<input ng-model='Payment.clientDescr' ng-trim="false" class='mdl-textfield__input' type='text' id='clientDescr' focus-me="defaultFocus"
+				select-on-focus>
+				<label class='mdl-textfield__label' for='clientDescr'>Партнер...</label>
+		</div>
+
+		<div class="d3-fixed-right-down">
+			<!--<button ng-click='findClient(); clientView = "select"' type='submit' class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>найти</button>-->
+			<button ng-click='findClient()' type='submit' class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>найти</button>
+		</div>
+
+	</div>
+
+	<!--<div ng-show='clientView === "select" || (clientView === undefined && Payment.clientList.length > 0)'>-->
+	<div ng-show='clientView === "select"'>
+
+		<ul class="mdl-list">
+
+			<!--<li ng-repeat="item in Payment.clientList track by $index" ng-click="onSelectClient($index)" class="mdl-list__item mdl-list__item--two-line" ng-attr-id="{{'cli-'+$index}}">-->
+			<li ng-repeat="item in clientList track by $index" ng-click="onSelectClient($index)" class="mdl-list__item mdl-list__item--two-line"
+				ng-attr-id="{{'cli-'+$index}}">
+				<span class="mdl-list__item-primary-content">
+				<i class="material-icons mdl-list__item-avatar">account_circle</i>
+				<span>{{item.description}}</span>
+				<span class="mdl-list__item-sub-title">{{item._info}}</span>
+				</span>
+				<span class="mdl-list__item-secondary-content">
+				</span>
+				</li>
+
+		</ul>
+
+		<div class="d3-fixed-right-down">
+			<button ng-click='switchToClientFilter(); defaultFocus = true' class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>поиск</button>
+			<!--<button ng-click='switchToClientFilter()' class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>поиск</button>-->
+		</div>
+
 	</div>
 
 </form>
 
-<div ng-if='Payment.activeForm==="client/select"'>
 
-	<ul class="mdl-list">
-
-		<li ng-repeat="item in Payment.clientList track by $index" ng-click="onSelectClient(item)" class="mdl-list__item mdl-list__item--two-line">
-			<span class="mdl-list__item-primary-content">
-				<i class="material-icons mdl-list__item-avatar">account_circle</i>
-				<span>{{item.description}}</span>
-				<span class="mdl-list__item-sub-title">{{item._info}}</span>
-			</span>
-			<!--<span class="mdl-list__item-secondary-content"></span>-->
-    
-		</li>
-
-	</ul>
-
-	<!--<div class="d3-fixed-right-down">
-		<button ng-click='switchTo("filter")' type='submit' class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>фильтр</button>
-	</div>-->
-
-</div>
-
-
-<form name='form' ng-if='Payment.activeForm==="debts/specify"'>
+<form name='form' ng-show='activeForm==="document"'>
 
 	<div class="mdl-card mdl-shadow--2dp">
 		<div class="mdl-card__title">
@@ -83,8 +130,8 @@
 	</div>
 
 	<div class="d3-fixed-right-down" style="float: right">
-<button ng-click="save()" class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>Записать</button>
-<button ng-click="exit()" class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>В начало</button>
-</div>
+		<button ng-click="save()" class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>Записать</button>
+		<button ng-click="exit()" class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>В начало</button>
+	</div>
 
 </form>

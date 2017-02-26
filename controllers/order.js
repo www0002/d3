@@ -11,7 +11,7 @@ angular
             if (!Order.state) { $location.path('/'); return; };
 
             $scope.Order = Order;
-            // $scope.activeView = $routeParams.attr + "/" + $routeParams.form;
+            
             $scope.activeView = $routeParams.link;
 
             $scope.defaultFocus = true;
@@ -54,9 +54,10 @@ angular
                     .then( function (response) {
                         if (response.data.value) {
                             Order.currSpecLine.product = response.data.value[0];
-                            if (Order.currSpecLine.product.PriceList) {
-                                Order.currSpecLine.price =  Order.currSpecLine.product.PriceList[0].Price;
-                                Order.currSpecLine.priceDescr = ' (' + Order.currSpecLine.product.PriceList[0].PriceDescr + '):';
+                            var prodData = Order.currSpecLine.product.restByStock;
+                            if (prodData.length > 0 && prodData[0].price) {
+                                Order.currSpecLine.price =  prodData[0].price;
+                                Order.currSpecLine.priceDescr = ' (' + prodData[0].priceDescr + '):';
                             }
                         };
                     });

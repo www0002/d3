@@ -31,7 +31,7 @@ angular.module('Home')
 
             $scope.startPayment = function (action) {
                 Payment.init();
-                $location.path('/payment/client/filter')
+                $location.path('/payment/document')
             };
 
 

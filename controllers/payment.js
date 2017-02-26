@@ -12,37 +12,65 @@ angular
 
             $scope.Payment = Payment;
 
-            $scope.Payment.activeForm = $routeParams.attr + "/" + $routeParams.form;
+            $scope.activeView = $routeParams.link;
 
-            $scope.findClient = function () {
-                $location.path('/payment/client/select');
-                $rootScope.$broadcast('updatePaymentClientList');
+            $scope.defaultFocus = true;
+
+            if ($rootScope.clientList === undefined) {
+                $scope.clientView = "filter";
+            } else {
+                $scope.clientView = "select";
+                if ($rootScope.clientListLastSelected) { 
+                    $timeout( function() { $anchorScroll($rootScope.clientListLastSelected); } );
+                };
             };
 
-            $scope.$on('updatePaymentClientList', function (e) {
-                Base.getClients({ descr: encodeURIComponent(Payment.clientDescr||' ') })
-                    .then( function (response) {
-                        Payment.clientList = response.data.value;
-                    });
-            });
-
-            $scope.onSelectClient = function (client) {
-                Payment.client = client;
-                $location.path('/payment/debts/specify');
-                $rootScope.$broadcast('updatePaymentDebts');
+            if ($scope.activeView === 'document' && Payment.autoClientChoice && !Payment.client) {
+                $scope.chooseClient();
+                Payment.autoClientChoice = false;
             };
 
-            $scope.$on('updatePaymentDebts', function (e) {
-                Payment.debts = [];
-                Base.getDebts( { id: Payment.client.ref_key } )
-                    .then ( function (response) {
-                        Payment.debts = response.data;
-                        Payment.recalcSum();
-                        $timeout(function () {
-                            componentHandler.upgradeDom();
-                        });
-                    });
-            });
+            $scope.switchToClientFilter = function () {
+                $scope.clientView = "filter";
+                // $scope.defaultFocus = true;
+                
+            };
+
+            // $scope.Payment.activeForm = $routeParams.attr + "/" + $routeParams.form;
+
+            // $scope.findClient = function () {
+            //     $location.path('/payment/client/select');
+            //     $rootScope.$broadcast('updatePaymentClientList');
+            // };
+
+            // $scope.$on('updatePaymentClientList', function (e) {
+            //     Base.getClients({ descr: encodeURIComponent(Payment.clientDescr||' ') })
+            //         .then( function (response) {
+            //             Payment.clientList = response.data.value;
+            //         });
+            // });
+
+            // $scope.onSelectClient = function (client) {
+            //     Payment.client = client;
+            //     $location.path('/payment/debts/specify');
+            //     $rootScope.$broadcast('updatePaymentDebts');
+            // };
+
+            // $scope.$on('updatePaymentDebts', function (e) {
+            //     Payment.debts = [];
+            //     Base.getDebts( { id: Payment.client.ref_key } )
+            //         .then ( function (response) {
+            //             Payment.debts = response.data;
+            //             Payment.recalcSum();
+            //             $timeout(function () {
+            //                 componentHandler.upgradeDom();
+            //             });
+            //         });
+            // });
+
+
+
+
 
             $scope.exit = function () {
                 Payment.clear();
