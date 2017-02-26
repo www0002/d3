@@ -5,8 +5,8 @@ angular
     .module('Payment')
 
     .controller('PaymentController',
-    ['$scope', 'Base', '$location', 'Payment', '$rootScope', '$routeParams', '$timeout', 
-        function ($scope, Base, $location, Payment, $rootScope, $routeParams, $timeout) {
+    ['$scope', 'Base', '$location', 'Payment', '$rootScope', '$routeParams', '$timeout', '$anchorScroll',
+        function ($scope, Base, $location, Payment, $rootScope, $routeParams, $timeout, $anchorScroll) {
 
             if (!Payment.state) { $location.path('/') };
 
@@ -20,8 +20,8 @@ angular
                 $scope.clientView = "filter";
             } else {
                 $scope.clientView = "select";
-                if ($rootScope.clientListLastSelected) { 
-                    $timeout( function() { $anchorScroll($rootScope.clientListLastSelected); } );
+                if ($rootScope.clientListLastSelected) {
+                    $timeout(function () { $anchorScroll($rootScope.clientListLastSelected); });
                 };
             };
 
@@ -33,7 +33,46 @@ angular
             $scope.switchToClientFilter = function () {
                 $scope.clientView = "filter";
                 // $scope.defaultFocus = true;
-                
+
+            };
+
+            $scope.chooseClient = function () {
+                $location.path('/payment/client/filter');
+            };
+
+            $scope.onSelectClient = function (idx) {
+                var client = $rootScope.clientList[idx];
+                $rootScope.clientListLastSelected = 'cli-' + idx;
+                Payment.client = client;
+                // Payment.setClient(client);
+                // $rootScope.deliberateBack = true;
+
+                Payment.debts = [];
+                Base.getDebts( { id: Payment.client.ref_key } )
+                    .then ( function (response) {
+                        Payment.debts = response.data;
+                        Payment.recalcSum();
+                        $timeout(function () {
+                            componentHandler.upgradeDom();
+                        });
+                    });
+
+
+                window.history.back();
+            };
+
+            $scope.findClient = function () {
+                // $timeout(Payment.getClients);
+
+                Base.getClients({ descr: encodeURIComponent(Payment.clientDescr || ' ') })
+                    .then(function (response) {
+
+                        // Payment.clientList = response.data.value;
+                        $rootScope.clientList = response.data.value;
+
+                        $scope.clientView = "select";
+                    });
+
             };
 
             // $scope.Payment.activeForm = $routeParams.attr + "/" + $routeParams.form;
@@ -78,18 +117,18 @@ angular
             };
 
             $scope.save = function () {
-                
+
                 var vm = this;
-                
+
                 if (Payment.state === 'pending') {
                     alertify.error('ожидается ответ от сервера');
                     return;
                 };
-                
+
                 Payment.state = 'pending';
 
-                Base.postPayment( { client: Payment.client, totalSum: Payment.sum, debts: Payment.debts } )
-                    .then( function (response) {
+                Base.postPayment({ client: Payment.client, totalSum: Payment.sum, debts: Payment.debts })
+                    .then(function (response) {
                         Payment.state = response.data.state;
                         if (Payment.state === 'error') {
                             u12.alertErr(response.data.message);
@@ -102,7 +141,7 @@ angular
                         } else {
                             u12.alertLog(response.data.message);
                         };
-                        
+
                     })
                     .catch(
                     function (response) {
@@ -110,7 +149,7 @@ angular
                         //alertify.error('ошибка');
                         u12.alertErr('ошибка');
                     });
-                
+
             };
 
         }])
@@ -142,12 +181,12 @@ angular
                     };
 
                     this.recalcSum();
-                    
+
                 },
 
                 recalcSum: function () {
-                    
-                    if (this.debts.some(function(e) { return e.observedSum < 0; })) {
+
+                    if (this.debts.some(function (e) { return e.observedSum < 0; })) {
                         this.sum = 0;
                     } else {
                         this.sum = u12.money(this.debts.reduce(function (a, e) { return a + e.observedSum }, 0));

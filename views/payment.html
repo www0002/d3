@@ -81,11 +81,11 @@
 </form>
 
 
-<form name='form' ng-show='activeForm==="document"'>
+<form name='form' ng-show='activeView==="document"'>
 
-	<div class="mdl-card mdl-shadow--2dp">
+	<div ng-click="chooseClient()" class="mdl-card mdl-shadow--2dp">
 		<div class="mdl-card__title">
-			<h2 class="mdl-card__title-text">{{Payment.client.description}}</h2>
+			<h2 class="mdl-card__title-text">{{(Payment.client) ? Payment.client.description : 'Партнер...'}}</h2>
 		</div>
 		<div class="mdl-card__supporting-text">
 			{{Payment.client._info}}
@@ -129,7 +129,8 @@
 		<label class="mdl-textfield__label" for="paymentSum">Получена сумма...</label>
 	</div>
 
-	<div class="d3-fixed-right-down" style="float: right">
+	<!--<div class="d3-fixed-right-down" style="float: right">-->
+	<div class="d3-right-down">
 		<button ng-click="save()" class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>Записать</button>
 		<button ng-click="exit()" class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored'>В начало</button>
 	</div>
