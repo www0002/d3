@@ -227,6 +227,9 @@ angular
                 if (Order.state === 'pending') {
                     alertify.error('ожидается ответ от сервера');
                     return;
+                } else if (Order.state === 'success') {
+                    alertify.error('заказ уже записан');
+                    return;
                 };
 
                 Order.state = 'pending';
